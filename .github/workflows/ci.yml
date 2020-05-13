@@ -10,9 +10,13 @@ env:
   KALDI_ROOT: kaldi
 
 jobs:
-  checkout:
+  java:
+#    runs-on: windows-latest
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Checkout kaldi repo
         uses: actions/checkout@v2
@@ -20,15 +24,8 @@ jobs:
           repository: kaldi-asr/kaldi
           path: kaldi
 
-#  java:
-#    runs-on: ubuntu-latest
-
-  java-win:
-    needs: checkout
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/setup-java@v1
+      - name: Setup java
+        uses: actions/setup-java@v1
         with:
           java-version: 8
 
