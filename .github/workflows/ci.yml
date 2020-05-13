@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: markus-franke/openfst
-          ref: winport
+          ref: FixUnitTestBuildWithCMake
           path: openfst
 
       - name: Compile OpenFST
