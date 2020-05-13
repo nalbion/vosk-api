@@ -20,8 +20,8 @@ jobs:
           repository: kaldi-asr/kaldi
           path: kaldi
 
-  java:
-    runs-on: ubuntu-latest
+#  java:
+#    runs-on: ubuntu-latest
 
   java-win:
     needs: checkout
