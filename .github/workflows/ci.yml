@@ -13,11 +13,12 @@ jobs:
   checkout:
     steps:
       - uses: actions/checkout@v2
+
       - name: Checkout kaldi repo
-      uses: actions/checkout@v2
-      with:
-        repository: kaldi-asr/kaldi
-        path: kaldi
+        uses: actions/checkout@v2
+        with:
+          repository: kaldi-asr/kaldi
+          path: kaldi
 
   java:
     runs-on: ubuntu-latest
