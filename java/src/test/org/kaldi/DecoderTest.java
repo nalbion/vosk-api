@@ -1,4 +1,4 @@
-package test;
+package org.kaldi;
 
 import java.io.File;
 import java.io.FileInputStream;

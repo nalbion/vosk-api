@@ -41,14 +41,14 @@ libvosk_jni.so: $(VOSK_SOURCES)
 	$(CXX) -shared -o $@ $(CPPFLAGS) $(CFLAGS) $(VOSK_SOURCES) $(KALDI_LIBS)
 
 vosk_wrap.cc: ../src/vosk.i
-	mkdir -p org/kaldi
+	mkdir -p src/main/java/org/kaldi
 	swig -c++ -I../src \
 		-java -package org.kaldi \
-		-outdir org/kaldi -o $@ $<
+		-outdir src/main/java/org/kaldi -o $@ $<
 
 clean:
 	$(RM) *.so *_wrap.cc *_wrap.o test/*.class
-	$(RM) -r org model-en
+	$(RM) -r src/main target model-en
 
 model:
 	wget https://alphacephei.com/kaldi/models/vosk-model-small-en-us-0.3.zip
@@ -61,5 +61,4 @@ model-spk:
 	mv vosk-model-spk-0.3 model-spk
 
 run: model model-spk
-	javac test/*.java org/kaldi/*.java
-	java -Djava.library.path=. -cp . test.DecoderTest
+	mvn test
