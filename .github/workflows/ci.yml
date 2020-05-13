@@ -26,10 +26,9 @@ jobs:
       - name: Checkout OpenFST repo
         uses: actions/checkout@v2
         with:
-          repository: kkm000/openfst
+          repository: markus-franke/openfst
           ref: winport
           path: openfst
-
 
       - name: Compile OpenFST
         working-directory: openfst
