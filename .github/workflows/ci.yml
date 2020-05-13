@@ -105,10 +105,10 @@ jobs:
           ls -al target
 
       - name: Archive jni library
-          uses: actions/upload-artifact@v1
-          with:
-            name: libvosk_jni.so
-            path: libvosk_jni.so
+        uses: actions/upload-artifact@v1
+        with:
+          name: libvosk_jni.so
+          path: libvosk_jni.so
 
       - name: Archive jar
         uses: actions/upload-artifact@v1
