@@ -24,12 +24,31 @@ jobs:
           repository: kaldi-asr/kaldi
           path: kaldi
 
+      - name: Kaldi compilation
+        working-directory: kaldi/tools
+        run: |
+          make
+          extras/install_openblas.sh
+          cd ../src
+          ./configure --mathlib=OPENBLAS --shared --use-cuda=no
+          make -j 10
+
+#      - name: Setup Python
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: '3.x'
+#
+#      - name: Build Python module
+#        working-directory: python
+#        run: python3 setup.py install --user --single-version-externally-managed --root=/
+
       - name: Setup java
         uses: actions/setup-java@v1
         with:
           java-version: 8
 
-      - run: dir
+      - run: ls -al
 
-      - name: Build
-        run: make && make run
+      - name: Build Java library
+        working-directory: java
+        run: make

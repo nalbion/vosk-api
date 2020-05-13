@@ -47,7 +47,7 @@ Make sure you have newer pip and python3:
   * Python version: 3.5-3.8 (Linux), 3.6-3.7 (ARM), 3.8 (OSX), 3.8 (Windows)
   * pip version: 19.0 and newer.
 
-Uprade python and pip if needed. Then install vosk on Linux/Mac with a simple command
+Upgrade python and pip if needed. Then install vosk on Linux/Mac with a simple command
 
 ```
 pip3 install vosk
