@@ -27,7 +27,8 @@ jobs:
       - name: Kaldi compilation
         working-directory: kaldi/tools
         run: |
-          make
+          apt-get install -y sox gfortran
+          extras/install_mkl.sh
           extras/install_openblas.sh
           cd ../src
           ./configure --mathlib=OPENBLAS --shared --use-cuda=no
