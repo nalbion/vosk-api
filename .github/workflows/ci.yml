@@ -30,6 +30,8 @@ jobs:
           sudo apt-get install -y sox gfortran
           extras/install_mkl.sh
           extras/install_openblas.sh
+          extras/check_dependencies.sh
+          make
           cd ../src
           ./configure --mathlib=OPENBLAS --shared --use-cuda=no
           make -j 10
