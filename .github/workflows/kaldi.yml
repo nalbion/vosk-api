@@ -11,10 +11,6 @@ jobs:
   windows:
     runs-on: windows-latest
 
-    strategy:
-      matrix:
-        configuration: [Debug, Release]
-
     steps:
       - name: Checkout kaldi repo
         uses: actions/checkout@v2
@@ -38,12 +34,11 @@ jobs:
         # msbuild /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
         run: |
           mkdir build64 && cd build64 && cmake ..
-          msbuild openfst.sln /p:Configuration=$env:Configuration
+          msbuild openfst.sln /p:Configuration=Release
         env:
           Appx_Bundle: Always
           Appx_Bundle_Platforms: x86|x64
           Appx_Package_Build_Mode: StoreUpload
-          Configuration: ${{ matrix.configuration }}
 
       # TODO: right click portaudio_static->Properties->C/C++->Code Generation->Runtime Library Change from Multi-Threaded Debug (/MTd) to Multi-threaded Debug DLL (/MDd)
       # Builds portaudio\build64\Debug\portaudio_x64.dll
@@ -57,9 +52,7 @@ jobs:
           dir
           cd portaudio
           mkdir build64 && cd build64 && cmake ..
-          msbuild portaudio.sln /p:Configuration=$env:Configuration
-        env:
-          Configuration: ${{ matrix.configuration }}
+          msbuild portaudio.sln /p:Configuration=Release
 
       - name: Prepare Kaldi
         working-directory: kaldi/tools
@@ -87,8 +80,8 @@ jobs:
         working-directory: kaldi/windows
         shell: powershell
         run: |
-          generate_solution.pl --enable-openblas
-          get_version.pl
+          ./generate_solution.pl --enable-openblas
+          ./get_version.pl
           dir
 
   linux:

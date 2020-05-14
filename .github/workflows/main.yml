@@ -26,7 +26,7 @@ jobs:
 #          with:
 #            name: kaldi.dll
 
-  java:
+  linux:
     runs-on: ubuntu-latest
 
     steps:
