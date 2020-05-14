@@ -26,9 +26,21 @@ jobs:
       - name: Checkout OpenFST repo
         uses: actions/checkout@v2
         with:
+#          repository: kkm000/openfst
+#          ref: winport
           repository: markus-franke/openfst
           ref: FixUnitTestBuildWithCMake
           path: openfst
+
+      - name: Compile PortAudio
+        # https://git.assembla.com/portaudio.git
+        run: |
+          curl -L -O http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz
+          unzip pa_stable_v190600_20161030.tgz
+          dir
+          cd portaudio
+          cmake
+          make
 
       - name: Compile OpenFST
         working-directory: openfst
@@ -36,9 +48,10 @@ jobs:
           mkdir build64
           cd build64
           cmake ..
-#         make
+          dir
+          make
 
-      - name: Compile Kaldi
+      - name: Prepare Kaldi
         working-directory: kaldi/tools
         run: |
           curl -L -O http://sourceforge.net/projects/openblas/files/v0.2.14/OpenBLAS-v0.2.14-Win64-int32.zip
@@ -46,7 +59,29 @@ jobs:
           unzip OpenBLAS-v0.2.14-Win64-int32.zip
           unzip mingw64_dll.zip
 
-#      - name: configure
+      - name: Configure Kaldi
+        working-directory: kaldi/windows
+        shell: powershell
+#        run: (gc variables.props.dev) -replace 'foo', 'bar' | Out-File -encoding ASCII variables.props
+        run: |
+          (Get-Content 'variables.props.dev') | Foreach-Object {
+            $_ -replace '(<OPENBLASDIR>).*(</OPENBLASDIR>)', '${1}OpenBLAS-v0.2.14-Win64-int32${2}' `
+            -replace '(<OPENFST>).*(</OPENFST>)', '${1}..\openfst${2}' `
+            -replace '(<OPENFSTLIB>).*(</OPENFSTLIB>)', '${1}..\openfst\build64${2}' `
+            -replace '(<PORTAUDIO>).*(</PORTAUDIO>)', '${1}..\openfst${2}' `
+            -replace '(<PORTAUDIOLIB>).*(</PORTAUDIOLIB>)', '${1}..\portaudio${2}'
+          } | Set-Content 'variables.props'
+#            -replace '(<NVTOOLSDIR>).*(</NVTOOLSDIR>)', '${1}..\openfst${2}'
+
+      - name: Compile Kaldi
+        working-directory: kaldi/windows
+        shell: powershell
+        run: |
+          generate_solution.pl --vsver <default|vs2017|vs2015> --enable-openblas
+          get_version.pl
+          dir
+
+  #      - name: configure
 #        run: mkdir build && cd build && cmake ..
 #      - name: build
 #        run: cmake --build build --config Debug
