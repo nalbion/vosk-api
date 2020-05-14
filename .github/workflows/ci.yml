@@ -13,6 +13,10 @@ jobs:
   windows:
     runs-on: windows-latest
 
+    strategy:
+      matrix:
+        configuration: [Debug|x64, Release|x64]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,20 +30,30 @@ jobs:
       - name: Checkout OpenFST repo
         uses: actions/checkout@v2
         with:
-#          repository: kkm000/openfst
-#          ref: winport
-          repository: markus-franke/openfst
-          ref: FixUnitTestBuildWithCMake
+          repository: kkm000/openfst
+          ref: winport
           path: openfst
+
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild
 
       - name: Compile OpenFST
         working-directory: openfst
+        # cmake --build build64 --config Release|x64
+        # msbuild /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
         run: |
           mkdir build64 && cd build64 && cmake ..
-          cmake --build build64 --config Release|x64
+          msbuild openfst.sln /p:Configuration=$env:Configuration
+        env:
+          Appx_Bundle: Always
+          Appx_Bundle_Platforms: x86|x64
+          Appx_Package_Build_Mode: StoreUpload
+          Configuration: ${{ matrix.configuration }}
 
+# TODO: ight click portaudio_static->Properties->C/C++->Code Generation->Runtime Library Change from Multi-Threaded Debug (/MTd) to Multi-threaded Debug DLL (/MDd)
       - name: Compile PortAudio
         # https://git.assembla.com/portaudio.git
+        #cmake --build build64 --config Release|x64
         run: |
           curl -L -O http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz
           dir
@@ -47,7 +61,9 @@ jobs:
           dir
           cd portaudio
           mkdir build64 && cd build64 && cmake ..
-          cmake --build build64 --config Release|x64
+          msbuild portaudio.sln /p:Configuration=$env:Configuration
+        env:
+          Configuration: ${{ matrix.configuration }}
 
       - name: Prepare Kaldi
         working-directory: kaldi/tools
