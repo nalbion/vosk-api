@@ -52,7 +52,7 @@ jobs:
           Appx_Package_Build_Mode: StoreUpload
 
       - run: dir
-        working-directory: openfst/build64
+        working-directory: openfst/build64/x64
 
       # TODO: right click portaudio_static->Properties->C/C++->Code Generation->Runtime Library Change from Multi-Threaded Debug (/MTd) to Multi-threaded Debug DLL (/MDd)
       # Builds portaudio\build64\Debug\portaudio_x64.dll
@@ -61,11 +61,9 @@ jobs:
         #cmake --build build64 --config Release|x64
         run: |
           curl -L -O http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz
-          dir
           tar xzvf pa_stable_v190600_20161030.tgz
-          dir
           cd portaudio
-          cmake -G "Visual Studio 15 2017 Win64"
+          cmake
           msbuild portaudio.sln /p:Configuration=Release
           dir
 
@@ -109,8 +107,9 @@ jobs:
           ref: ${{ env.KALDI_REF }}
           path: kaldi
 
-      - id: kaldi-commit
+      - name: Kaldi Commit
         if: ${{ env.KALDI_REF == 'master' }}
+        working-directory: kaldi
         run: echo ::set-env name=KALDI_VERSION::$(git rev-parse --short HEAD)
 #        run: echo ::set-output name=short::$(git rev-parse --short HEAD)
         # ${steps.kaldi-commit.outputs.short}
