@@ -35,11 +35,8 @@ jobs:
       - name: Compile OpenFST
         working-directory: openfst
         run: |
-          mkdir build64
-          cd build64
-          cmake ..
-          dir
-          make
+          mkdir build64 && cd build64 && cmake ..
+          cmake --build build64 --config Release|x64
 
       - name: Compile PortAudio
         # https://git.assembla.com/portaudio.git
@@ -49,8 +46,8 @@ jobs:
           tar xzvf pa_stable_v190600_20161030.tgz
           dir
           cd portaudio
-          cmake
-          make
+          mkdir build64 && cd build64 && cmake ..
+          cmake --build build64 --config Release|x64
 
       - name: Prepare Kaldi
         working-directory: kaldi/tools
@@ -78,7 +75,7 @@ jobs:
         working-directory: kaldi/windows
         shell: powershell
         run: |
-          generate_solution.pl --vsver <default|vs2017|vs2015> --enable-openblas
+          generate_solution.pl --enable-openblas
           get_version.pl
           dir
 
