@@ -117,7 +117,7 @@ jobs:
 
       - name: Kaldi Version
         if: ${{ env.KALDI_REF != 'master' }}
-        run: echo ::set-env name=KALDI_VERSION::${env.KALDI_REF}
+        run: echo ::set-env name=KALDI_VERSION::${{ env.KALDI_REF }}
 
       - name: Compile Kaldi
         working-directory: kaldi/tools
