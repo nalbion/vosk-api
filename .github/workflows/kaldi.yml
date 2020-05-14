@@ -106,7 +106,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: kaldi-asr/kaldi
-          ref: ${{ env:KALDI_REF }}
+          ref: ${{ env.KALDI_REF }}
           path: kaldi
 
       - id: kaldi-commit
@@ -138,5 +138,5 @@ jobs:
       - name: Save kaldi-linux.zip
         uses: actions/upload-artifact@v2
         with:
-          name: kaldi-linux-${env:KALDI_VERSION}
+          name: kaldi-linux-${{ env.KALDI_VERSION }}
           path: kaldi/kaldi-linux.zip
