@@ -1,11 +1,21 @@
 name: Kaldi
 
+# This build takes over an hour to run, so it only runs when this file is modified.
+# To build a new Kaldi release, update KALDI_REF below.
+
+env:
+  KALDI_REF: 5.0
+#  KALDI_REF: master
+#  KALDI_VERSION:
+
 on:
   push:
+    paths:
+      - '.github/worflows/kaldi.yml'
     branches:
       - master
-  schedule:
-    - cron: '0 0 * * *'
+#  schedule:
+#    - cron: '0 0 * * *'
 
 jobs:
   windows:
@@ -16,6 +26,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: kaldi-asr/kaldi
+          ref: ${env:KALDI_REF}
           path: kaldi
 
       - name: Checkout OpenFST repo
@@ -40,6 +51,9 @@ jobs:
           Appx_Bundle_Platforms: x86|x64
           Appx_Package_Build_Mode: StoreUpload
 
+      - run: dir
+        working-directory: openfst/build64
+
       # TODO: right click portaudio_static->Properties->C/C++->Code Generation->Runtime Library Change from Multi-Threaded Debug (/MTd) to Multi-threaded Debug DLL (/MDd)
       # Builds portaudio\build64\Debug\portaudio_x64.dll
       - name: Compile PortAudio
@@ -51,8 +65,9 @@ jobs:
           tar xzvf pa_stable_v190600_20161030.tgz
           dir
           cd portaudio
-          mkdir build64 && cd build64 && cmake ..
+          cmake -G "Visual Studio 15 2017 Win64"
           msbuild portaudio.sln /p:Configuration=Release
+          dir
 
       - name: Prepare Kaldi
         working-directory: kaldi/tools
@@ -78,7 +93,6 @@ jobs:
 
       - name: Compile Kaldi
         working-directory: kaldi/windows
-        shell: powershell
         run: |
           ./generate_solution.pl --enable-openblas
           ./get_version.pl
@@ -92,7 +106,18 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: kaldi-asr/kaldi
+          ref: ${env:KALDI_REF}
           path: kaldi
+
+      - id: kaldi-commit
+        if: ${{ env.KALDI_REF == 'master' }}
+        run: echo ::set-env name=KALDI_VERSION::$(git rev-parse --short HEAD)
+#        run: echo ::set-output name=short::$(git rev-parse --short HEAD)
+        # ${steps.kaldi-commit.outputs.short}
+
+      - name: Kaldi Version
+        if: ${{ env.KALDI_REF != 'master' }}
+        run: echo ::set-env name=KALDI_VERSION::${env.KALDI_REF}
 
       - name: Compile Kaldi
         working-directory: kaldi/tools
@@ -112,10 +137,11 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: kaldi-libs-a
-          path: kaldi/(src|tools)/**/*.a
+          path: kaldi/**/*.a
 
       - name: Save kaldi-libs.tgz
         uses: actions/upload-artifact@v2
         with:
-          name: kaldi-libs.tgz
+#          name: kaldi-libs.tgz
+          name: kaldi-libs-${env:KALDI_VERSION}.tgz
           path: kaldi/kaldi-libs.tgz
