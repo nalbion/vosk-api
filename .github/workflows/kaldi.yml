@@ -11,7 +11,7 @@ env:
 on:
   push:
     paths:
-      - '.github/worflows/kaldi.yml'
+      - '.github/workflows/kaldi.yml'
     branches:
       - master
 #  schedule:
