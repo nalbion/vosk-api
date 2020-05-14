@@ -122,6 +122,7 @@ jobs:
       - name: Compile Kaldi
         working-directory: kaldi/tools
         # extras/install_mkl.sh
+#        find -name '*.a' -printf '%P\0' | tar --null --files-from=- -cf 'kaldi-libs.tgz'
         run: |
           sudo apt-get install -y sox gfortran zlib1g-dev libtool
           ./extras/install_openblas.sh
@@ -131,17 +132,11 @@ jobs:
           ./configure --mathlib=OPENBLAS --shared --use-cuda=no
           make -j depend; make -j 8
           cd ..
-          find -name '*.a' -printf '%P\0' | tar --null --files-from=- -cf 'kaldi-libs.tgz'
+          find -regex ".*/kaldi-.*\.a" -not -regex ".*-\(chain\|kws\|nnet\|nnet2\|rnnlm\|sgmm2\).a" -print | zip kaldi-linux -@
+          zip kaldi-linux tools/openfst/lib/libfst.a tools/openfst/lib/libfstngram.a tools/OpenBLAS/libopenblas.a
 
-      - name: Save kaldi-libs-a
+      - name: Save kaldi-linux.zip
         uses: actions/upload-artifact@v2
         with:
-          name: kaldi-libs-a
-          path: kaldi/**/*.a
-
-      - name: Save kaldi-libs.tgz
-        uses: actions/upload-artifact@v2
-        with:
-#          name: kaldi-libs.tgz
-          name: kaldi-libs-${env:KALDI_VERSION}.tgz
-          path: kaldi/kaldi-libs.tgz
+          name: kaldi-linux-${env:KALDI_VERSION}
+          path: kaldi/kaldi-linux.zip
