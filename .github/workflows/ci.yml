@@ -32,16 +32,6 @@ jobs:
           ref: FixUnitTestBuildWithCMake
           path: openfst
 
-      - name: Compile PortAudio
-        # https://git.assembla.com/portaudio.git
-        run: |
-          curl -L -O http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz
-          unzip pa_stable_v190600_20161030.tgz
-          dir
-          cd portaudio
-          cmake
-          make
-
       - name: Compile OpenFST
         working-directory: openfst
         run: |
@@ -49,6 +39,17 @@ jobs:
           cd build64
           cmake ..
           dir
+          make
+
+      - name: Compile PortAudio
+        # https://git.assembla.com/portaudio.git
+        run: |
+          curl -L -O http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz
+          dir
+          tar xzvf pa_stable_v190600_20161030.tgz
+          dir
+          cd portaudio
+          cmake
           make
 
       - name: Prepare Kaldi
