@@ -33,23 +33,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Download kaldi-libs.tgz
+      - name: Download kaldi-linux
         uses: actions/download-artifact@v1
         with:
-          name: kaldi-libs.tgz
-          path: kaldi
-
-      - name: Download kaldi-libs.tgz
-        uses: actions/download-artifact@v1
-        with:
-          name: kaldi-libs-a
+          name: kaldi-linux-
           path: kaldi
 
       - name: Extract Kaldi libs
         working-directory: kaldi
         run: |
           ls -al
-          tar -xvf kaldi-libs.tgz
+          unzip kaldi-linux-
           ls -al
 
 #      - name: Setup Python
