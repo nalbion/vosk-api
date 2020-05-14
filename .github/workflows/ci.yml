@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug|x64, Release|x64]
+        configuration: [Debug, Release]
 
     steps:
       - name: Checkout
