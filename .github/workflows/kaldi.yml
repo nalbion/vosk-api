@@ -4,8 +4,8 @@ name: Kaldi
 # To build a new Kaldi release, update KALDI_REF below.
 
 env:
-  KALDI_REF: '5.0'
-#  KALDI_REF: master
+#  KALDI_REF: '5.0'
+  KALDI_REF: master
 #  KALDI_VERSION:
 
 on:
