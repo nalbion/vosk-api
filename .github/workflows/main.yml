@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, win-build ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+#  windows:
+#    runs-on: windows-latest
+#
+#    strategy:
+#      matrix:
+#        configuration: [Debug, Release]
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#
+#      - name: Setup MSBuild.exe
+#        uses: microsoft/setup-msbuild@v1.0.0
+#
+#      - name: Download Kaldi DLL
+#          uses: actions/download-artifact@v1
+#          with:
+#            name: kaldi.dll
+
+  java:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download kaldi-libs.tgz
+        uses: actions/download-artifact@v1
+        working-directory: kaldi
+        with:
+          name: kaldi-libs.tgz
+
+      - name: Download kaldi-libs.tgz
+        uses: actions/download-artifact@v1
+        working-directory: kaldi
+        with:
+          name: kaldi-libs-a
+          path: kaldi
+
+      -name: Extract Kaldi libs
+        working-directory: kaldi
+        run: |
+          ls -al
+          tar -xvf kaldi-libs.tgz
+          ls -al
+
+#      - name: Setup Python
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: '3.x'
+#
+#      - name: Build Python module
+#        working-directory: python
+#        run: python3 setup.py install --user --single-version-externally-managed --root=/
+
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+#          settings-path: ${{ github.workspace }}
+
+      - name: Build Java library
+        working-directory: java
+        env:
+          KALDI_ROOT: ../../kaldi
+        run: |
+          sudo apt-get install -y swig
+          make
+          mvn package
+
+      - name: List artifacts
+        working-directory: java
+        run: |
+          ls -al
+          ls -al src/main/java/
+          ls -al target
+
+      - name: Archive jni library
+        uses: actions/upload-artifact@v1
+        with:
+          name: libvosk_jni.so
+          path: libvosk_jni.so
+
+      - name: Archive jar
+        uses: actions/upload-artifact@v1
+        with:
+          name: vosk.jar
+          path: target/vosk*.jar
+
+#TODO: also deploy .so & .dll
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy
+        #-s $GITHUB_WORKSPACE/settings.xml
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
