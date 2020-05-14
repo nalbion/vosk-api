@@ -1,4 +1,4 @@
-name: CI
+name: Vosk
 
 on:
   push:
@@ -35,18 +35,17 @@ jobs:
 
       - name: Download kaldi-libs.tgz
         uses: actions/download-artifact@v1
-        working-directory: kaldi
         with:
           name: kaldi-libs.tgz
+          path: kaldi
 
       - name: Download kaldi-libs.tgz
         uses: actions/download-artifact@v1
-        working-directory: kaldi
         with:
           name: kaldi-libs-a
           path: kaldi
 
-      -name: Extract Kaldi libs
+      - name: Extract Kaldi libs
         working-directory: kaldi
         run: |
           ls -al

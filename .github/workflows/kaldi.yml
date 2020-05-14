@@ -117,14 +117,12 @@ jobs:
 
       - name: Save kaldi-libs-a
         uses: actions/upload-artifact@v2
-        working-directory: kaldi
         with:
           name: kaldi-libs-a
-          path: (src|tools)/**/*.a
+          path: kaldi/(src|tools)/**/*.a
 
       - name: Save kaldi-libs.tgz
         uses: actions/upload-artifact@v2
-        working-directory: kaldi
         with:
           name: kaldi-libs.tgz
-          path: kaldi-libs.tgz
+          path: kaldi/kaldi-libs.tgz
