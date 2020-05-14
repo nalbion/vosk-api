@@ -35,7 +35,7 @@ jobs:
           path: openfst
 
       - name: Setup MSBuild.exe
-        uses: microsoft/setup-msbuild
+        uses: microsoft/setup-msbuild@v1.0.0
 
       - name: Compile OpenFST
         working-directory: openfst
@@ -50,7 +50,7 @@ jobs:
           Appx_Package_Build_Mode: StoreUpload
           Configuration: ${{ matrix.configuration }}
 
-# TODO: ight click portaudio_static->Properties->C/C++->Code Generation->Runtime Library Change from Multi-Threaded Debug (/MTd) to Multi-threaded Debug DLL (/MDd)
+# TODO: right click portaudio_static->Properties->C/C++->Code Generation->Runtime Library Change from Multi-Threaded Debug (/MTd) to Multi-threaded Debug DLL (/MDd)
       - name: Compile PortAudio
         # https://git.assembla.com/portaudio.git
         #cmake --build build64 --config Release|x64
