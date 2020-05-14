@@ -33,19 +33,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Download kaldi-linux
-        uses: actions/download-artifact@v1
-        with:
-          name: kaldi-linux-
-          path: kaldi
-
-      - name: Extract Kaldi libs
-        working-directory: kaldi
-        run: |
-          ls -al
-          unzip kaldi-linux-
-          ls -al
-
 #      - name: Setup Python
 #        uses: actions/setup-python@v2
 #        with:
@@ -60,6 +47,26 @@ jobs:
         with:
           java-version: 8
 #          settings-path: ${{ github.workspace }}
+
+      - name: Download kaldi-linux
+        run: |
+          mvn org.apache.maven.plugins:maven-dependency-plugin:2.1:get \
+                -DrepoUrl=https://maven.pkg.github.com/${{ GITHUB_REPOSITORY }} \
+                -DrepositoryId=github \
+                -Dartifact=kaldi-asr:kaldi-linux:9b4dc93 -Dpackaging=zip
+
+#      - name: Download kaldi-linux
+#        uses: actions/download-artifact@v1
+#        with:
+#          name: kaldi-linux-
+#          path: kaldi
+
+      - name: Extract Kaldi libs
+        working-directory: kaldi
+        run: |
+          ls -al
+          unzip kaldi-linux-
+          ls -al
 
       - name: Build Java library
         working-directory: java
