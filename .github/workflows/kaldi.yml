@@ -93,8 +93,8 @@ jobs:
         working-directory: kaldi/windows
         shell: cmd
         run: |
-          ./generate_solution.pl --enable-openblas
-          ./get_version.pl
+          perl generate_solution.pl --enable-openblas
+          perl get_version.pl
           dir
 
   linux:
