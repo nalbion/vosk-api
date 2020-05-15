@@ -93,6 +93,7 @@ jobs:
         working-directory: kaldi/windows
         shell: cmd
         run: |
+          rename kaldiwin_openblas.props kaldiwin.props
           perl generate_solution.pl --enable-openblas
           perl get_version.pl
           dir
