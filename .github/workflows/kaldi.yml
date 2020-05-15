@@ -145,7 +145,7 @@ jobs:
           mvn deploy:deploy-file \
             -DgroupId=kaldi-asr -DartifactId=kaldi-linux -Dversion=${{ env.KALDI_VERSION }} \
             -DrepositoryId=github \
-            -DrepoUrl=https://maven.pkg.github.com/${{ GITHUB_REPOSITORY }} \
+            -DrepoUrl=https://maven.pkg.github.com/${{ env.GITHUB_REPOSITORY }} \
             -Dpackaging=zip -Dfile=kaldi-linux.zip \
 
 #            -Durl=

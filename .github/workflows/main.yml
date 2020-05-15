@@ -51,7 +51,7 @@ jobs:
       - name: Download kaldi-linux
         run: |
           mvn org.apache.maven.plugins:maven-dependency-plugin:2.1:get \
-                -DrepoUrl=https://maven.pkg.github.com/${{ GITHUB_REPOSITORY }} \
+                -DrepoUrl=https://maven.pkg.github.com/${{ env.GITHUB_REPOSITORY }} \
                 -DrepositoryId=github \
                 -Dartifact=kaldi-asr:kaldi-linux:9b4dc93 -Dpackaging=zip
 
