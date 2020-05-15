@@ -25,7 +25,8 @@ jobs:
       - name: Checkout kaldi repo
         uses: actions/checkout@v2
         with:
-          repository: kaldi-asr/kaldi
+#          repository: kaldi-asr/kaldi
+          repository: nalbion/kaldi
           ref: ${{ env.KALDI_REF }}
           path: kaldi
 
@@ -92,22 +93,26 @@ jobs:
       - name: Compile Kaldi
         working-directory: kaldi/windows
         shell: cmd
+#        C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Microsoft\VC\v150\Microsoft.Cpp.WindowsSDK.targets(46,5): error MSB8036:
+#        The Windows SDK version 8.1 was not found. Install the required version of Windows SDK or change the SDK version
+#        in the project property pages or by right-clicking the solution and selecting "Retarget solution".
+#        [D:\a\vosk-api\vosk-api\kaldi\kaldiwin_vs2019_OPENBLAS\kaldiwin\kaldi-ivector\kaldi-ivector.vcxproj]
         # VS 2017        v141 uses Windows SDK 8.1
         # VS 2019 16.5.4 v150 Windows SDK 10?
         run: |
           rename ..\src\cudadecoder\cuda-decoder-kernels.cu cuda-decoder-kernels.cc
           rename ..\src\cudadecoder\batched-static-nnet3-kernels.cu batched-static-nnet3-kernels.cc
           rename kaldiwin_openblas.props kaldiwin.props
-          perl generate_solution.pl --enable-openblas
+          perl generate_solution.pl --vsver vs2019 --enable-openblas
           perl get_version.pl
           dir ..
-          cd ..\kaldiwin_vs2017_OPENBLAS
+          cd ..\kaldiwin_vs2019_OPENBLAS
           dir
           dir kaldiwin
-          perl -pi -e 's/14.10/14.25/g' kaldiwin_vs2017.sln
-          perl -pi -e 's/14.1/14.2/g' kaldiwin/*.vcxproj
-          perl -pi -e 's/v141/v142/g' kaldiwin/*.vcxproj
-          msbuild kaldiwin_vs2017.sln /p:Configuration=Release
+#          perl -pi -e 's/14.10/14.25/g' kaldiwin_vs2019.sln
+#          perl -pi -e 's/14.1/14.2/g' kaldiwin/*.vcxproj
+#          perl -pi -e 's/v141/v142/g' kaldiwin/*.vcxproj
+          msbuild kaldiwin_vs2019.sln /p:Configuration=Release
           dir
           dir kaldiwin
 
@@ -115,7 +120,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: visual-studio
-          path: kaldi/kaldiwin_vs2017_OPENBLAS/
+          path: kaldi/kaldiwin_vs2019_OPENBLAS/
 
   linux:
     runs-on: ubuntu-latest
