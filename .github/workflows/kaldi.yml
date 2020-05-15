@@ -93,8 +93,8 @@ jobs:
         working-directory: kaldi/windows
         shell: cmd
         run: |
-          rename ..\src\cudadecoder\cuda-decoder-kernels.cu ..\src\cudadecoder\cuda-decoder-kernels.cc
-          rename ..\src\cudadecoder\batched-static-nnet3-kernels.cu ..\src\cudadecoder\batched-static-nnet3-kernels.cc
+          rename ..\src\cudadecoder\cuda-decoder-kernels.cu cuda-decoder-kernels.cc
+          rename ..\src\cudadecoder\batched-static-nnet3-kernels.cu batched-static-nnet3-kernels.cc
           rename kaldiwin_openblas.props kaldiwin.props
           perl generate_solution.pl --enable-openblas
           perl get_version.pl
