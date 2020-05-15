@@ -91,6 +91,7 @@ jobs:
 
       - name: Compile Kaldi
         working-directory: kaldi/windows
+        shell: cmd
         run: |
           ./generate_solution.pl --enable-openblas
           ./get_version.pl
