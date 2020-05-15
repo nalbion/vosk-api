@@ -125,7 +125,6 @@ jobs:
       - name: Compile Kaldi
         working-directory: kaldi/tools
         # extras/install_mkl.sh
-#        find -name '*.a' -printf '%P\0' | tar --null --files-from=- -cf 'kaldi-libs.tgz'
         run: |
           sudo apt-get install -y sox gfortran zlib1g-dev libtool
           ./extras/install_openblas.sh
@@ -138,21 +137,22 @@ jobs:
           find -regex ".*/kaldi-.*\.a" -not -regex ".*-\(chain\|kws\|nnet\|nnet2\|rnnlm\|sgmm2\).a" -print | zip kaldi-linux -@
           zip kaldi-linux tools/openfst/lib/libfst.a tools/openfst/lib/libfstngram.a tools/OpenBLAS/libopenblas.a
 
-      - name: Setup java
+      - name: Setup java for mvn deploy
         uses: actions/setup-java@v1
         with:
           java-version: 8
 
       - name: Deploy kaldi-linux.zip
         working-directory: kaldi
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
         run: |
           mvn deploy:deploy-file \
-            -DgroupId=kaldi-asr -DartifactId=kaldi-linux -Dversion=${{ env.KALDI_VERSION }} \
+            -DgroupId=kaldi-asr -DartifactId=kaldi Dclassifier=linux -Dversion=${{ env.KALDI_VERSION }} \
             -DrepositoryId=temp \
+            -Dregistry=https://maven.pkg.github.com/nalbion -Dtoken=${{ secrets.GITHUB_TOKEN }}
             -Durl=https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
             -Dpackaging=zip -Dfile=kaldi-linux.zip \
-
-#            -Durl=
 
         # The artifacts are only available for 90 days, and don't seem to work between workflows
 #      - name: Save kaldi-linux.zip
