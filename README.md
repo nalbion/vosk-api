@@ -1,3 +1,5 @@
+[![Vosk](https://github.com/alphacep/vosk-api/workflows/Vosk/badge.svg)](https://github.com/alphacep/vosk-api/actions?query=workflow%3AVosk)
+[![Kaldi](https://github.com/alphacep/vosk-api/workflows/Kaldi/badge.svg)](https://github.com/alphacep/vosk-api/actions?query=workflow%3AKaldi)
 [![Build Status](https://travis-ci.com/alphacep/vosk-api.svg?branch=master)](https://travis-ci.com/alphacep/vosk-api)
 
 [РУС](README.ru.md)

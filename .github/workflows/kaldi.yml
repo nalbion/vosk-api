@@ -98,6 +98,10 @@ jobs:
           rename kaldiwin_openblas.props kaldiwin.props
           perl generate_solution.pl --enable-openblas
           perl get_version.pl
+          dir ..
+          cd ..\kaldiwin_vs2017_OPENBLAS
+          dir
+          msbuild kaldiwin_vs2017.sln /p:Configuration=Release
           dir
 
   linux:
