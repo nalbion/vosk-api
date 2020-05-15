@@ -101,11 +101,13 @@ jobs:
           dir ..
           cd ..\kaldiwin_vs2017_OPENBLAS
           dir
+          dir kaldiwin
           perl -pi -e 's/14.10/14.25/g' kaldiwin_vs2017.sln
-          perl -pi -e 's/14.1/14.2/g' kaldiwin_vs2017.sln
-          perl -pi -e 's/v141/v142/g' kaldiwin_vs2017.sln
+          perl -pi -e 's/14.1/14.2/g' kaldiwin/*.vcxproj
+          perl -pi -e 's/v141/v142/g' kaldiwin/*.vcxproj
           msbuild kaldiwin_vs2017.sln /p:Configuration=Release
           dir
+          dir kaldiwin
 
   linux:
     runs-on: ubuntu-latest
