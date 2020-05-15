@@ -63,7 +63,7 @@ jobs:
           curl -L -O http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz
           tar xzvf pa_stable_v190600_20161030.tgz
           cd portaudio
-          cmake
+          mkdir build64 && cd build64 && cmake ..
           msbuild portaudio.sln /p:Configuration=Release
           dir
 
