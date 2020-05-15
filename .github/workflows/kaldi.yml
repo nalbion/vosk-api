@@ -126,6 +126,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Checkout kaldi repo
         uses: actions/checkout@v2
         with:
@@ -169,7 +172,7 @@ jobs:
 #        env:
 #          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          dir
+          ls -al
           perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}${{ env.KALDI_VERSION }}${2}/g' pom.xml
           mvn deploy
 #          mvn deploy:deploy-file \
