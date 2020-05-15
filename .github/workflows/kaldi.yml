@@ -92,6 +92,8 @@ jobs:
       - name: Compile Kaldi
         working-directory: kaldi/windows
         shell: cmd
+        # VS 2017        v141 uses Windows SDK 8.1
+        # VS 2019 16.5.4 v150 Windows SDK 10?
         run: |
           rename ..\src\cudadecoder\cuda-decoder-kernels.cu cuda-decoder-kernels.cc
           rename ..\src\cudadecoder\batched-static-nnet3-kernels.cu batched-static-nnet3-kernels.cc
@@ -108,6 +110,12 @@ jobs:
           msbuild kaldiwin_vs2017.sln /p:Configuration=Release
           dir
           dir kaldiwin
+
+      - name: Visual Studio artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: visual-studio
+          path: kaldi/kaldiwin_vs2017_OPENBLAS/
 
   linux:
     runs-on: ubuntu-latest
