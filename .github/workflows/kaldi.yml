@@ -99,6 +99,9 @@ jobs:
 #        [D:\a\vosk-api\vosk-api\kaldi\kaldiwin_vs2019_OPENBLAS\kaldiwin\kaldi-ivector\kaldi-ivector.vcxproj]
         # VS 2017        v141 uses Windows SDK 8.1
         # VS 2019 16.5.4 v150 Windows SDK 10?
+        #          perl -pi -e 's/14.10/14.25/g' kaldiwin_vs2019.sln
+        #          perl -pi -e 's/14.1/14.2/g' kaldiwin/*.vcxproj
+        #          perl -pi -e 's/v141/v142/g' kaldiwin/*.vcxproj
         run: |
           rename ..\src\cudadecoder\cuda-decoder-kernels.cu cuda-decoder-kernels.cc
           rename ..\src\cudadecoder\batched-static-nnet3-kernels.cu batched-static-nnet3-kernels.cc
@@ -109,9 +112,6 @@ jobs:
           cd ..\kaldiwin_vs2019_OPENBLAS
           dir
           dir kaldiwin
-#          perl -pi -e 's/14.10/14.25/g' kaldiwin_vs2019.sln
-#          perl -pi -e 's/14.1/14.2/g' kaldiwin/*.vcxproj
-#          perl -pi -e 's/v141/v142/g' kaldiwin/*.vcxproj
           msbuild kaldiwin_vs2019.sln /p:Configuration=Release
           dir
           dir kaldiwin
