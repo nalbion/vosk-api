@@ -101,6 +101,9 @@ jobs:
           dir ..
           cd ..\kaldiwin_vs2017_OPENBLAS
           dir
+          perl -pi -e 's/14.10/14.25/g' kaldiwin_vs2017.sln
+          perl -pi -e 's/14.1/14.2/g' kaldiwin_vs2017.sln
+          perl -pi -e 's/v141/v142/g' kaldiwin_vs2017.sln
           msbuild kaldiwin_vs2017.sln /p:Configuration=Release
           dir
 
@@ -137,9 +140,9 @@ jobs:
           cd ../src
           ./configure --mathlib=OPENBLAS --shared --use-cuda=no
           make -j depend; make -j 8
-          cd ..
-          find -regex ".*/kaldi-.*\.a" -not -regex ".*-\(chain\|kws\|nnet\|nnet2\|rnnlm\|sgmm2\).a" -print | zip kaldi-linux -@
-          zip kaldi-linux tools/openfst/lib/libfst.a tools/openfst/lib/libfstngram.a tools/OpenBLAS/libopenblas.a
+#          cd ..
+#          find -regex ".*/kaldi-.*\.a" -not -regex ".*-\(chain\|kws\|nnet\|nnet2\|rnnlm\|sgmm2\).a" -print | zip kaldi-linux -@
+#          zip kaldi-linux tools/openfst/lib/libfst.a tools/openfst/lib/libfstngram.a tools/OpenBLAS/libopenblas.a
 
       - name: Setup java for mvn deploy
         uses: actions/setup-java@v1
@@ -151,12 +154,15 @@ jobs:
 #        env:
 #          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          mvn deploy:deploy-file \
-            -DgroupId=kaldi-asr -DartifactId=kaldi Dclassifier=linux -Dversion=${{ env.KALDI_VERSION }} \
-            -DrepositoryId=temp \
-            -Dregistry=https://maven.pkg.github.com/nalbion -Dtoken=${{ secrets.GITHUB_TOKEN }}
-            -Durl=https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
-            -Dpackaging=zip -Dfile=kaldi-linux.zip \
+          dir
+          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}${{ env.KALDI_VERSION }}${2}/g' pom.xml
+          mvn deploy
+#          mvn deploy:deploy-file \
+#            -DgroupId=org.kaldi -DartifactId=kaldi Dclassifier=linux -Dversion=${{ env.KALDI_VERSION }} \
+#            -DrepositoryId=temp \
+#            -Dregistry=https://maven.pkg.github.com/nalbion -Dtoken=${{ secrets.GITHUB_TOKEN }}
+#            -Durl=https://maven.pkg.github.com/${GITHUB_REPOSITORY} \
+#            -Dpackaging=zip -Dfile=kaldi-linux.zip \
 
         # The artifacts are only available for 90 days, and don't seem to work between workflows
 #      - name: Save kaldi-linux.zip
@@ -164,3 +170,7 @@ jobs:
 #        with:
 #          name: kaldi-linux-${{ env.KALDI_VERSION }}
 #          path: kaldi/kaldi-linux.zip
+
+#  macos:
+#    runs-on: macos-latest
+#    steps:

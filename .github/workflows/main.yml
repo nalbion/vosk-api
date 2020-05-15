@@ -2,6 +2,8 @@ name: Vosk
 
 on:
   push:
+    paths-ignore:
+      - '.github/workflows/kaldi.yml'
     branches: [ master, win-build ]
   pull_request:
     branches: [ master ]
