@@ -1,0 +1,37 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <id>kaldi-windows</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <fileSets>
+        <fileSet>
+            <directory>kaldiwin_vs2019_OPENBLAS\x64\Release</directory>
+<!--            <outputDirectory></outputDirectory>-->
+            <includes>
+                <include>*/kaldi-*.lib</include>
+            </includes>
+            <excludes>
+                <exclude>*/kaldi-chain.lib</exclude>
+                <exclude>*/kaldi-kms.lib</exclude>
+                <exclude>*/kaldi-nnet.lib</exclude>
+                <exclude>*/kaldi-nnet2.lib</exclude>
+                <exclude>*/kaldi-rnnlm.lib</exclude>
+                <exclude>*/kaldi-sgmm2.lib</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>tools</directory>
+            <outputDirectory>tools</outputDirectory>
+            <includes>
+                <include>openfst/lib/libfst.a</include>
+                <include>openfst/lib/libfstngram.a</include>
+                <include>OpenBLAS/libopenblas.a</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>
