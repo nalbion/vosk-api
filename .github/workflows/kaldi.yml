@@ -22,6 +22,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Checkout kaldi repo
         uses: actions/checkout@v2
         with:
@@ -29,6 +32,7 @@ jobs:
           repository: nalbion/kaldi
           ref: ${{ env.KALDI_REF }}
           path: kaldi
+          clean: false
 
       - name: Checkout OpenFST repo
         uses: actions/checkout@v2
@@ -36,6 +40,17 @@ jobs:
           repository: kkm000/openfst
           ref: winport
           path: openfst
+
+      - name: Kaldi Commit
+        if: ${{ env.KALDI_REF == 'master' }}
+        working-directory: kaldi
+        run: echo ::set-env name=KALDI_VERSION::$(git rev-parse --short HEAD)
+          #        run: echo ::set-output name=short::$(git rev-parse --short HEAD)
+          # ${steps.kaldi-commit.outputs.short}
+
+      - name: Kaldi Version
+        if: ${{ env.KALDI_REF != 'master' }}
+        run: echo ::set-env name=KALDI_VERSION::${{ env.KALDI_REF }}
 
       - name: Setup MSBuild.exe
         uses: microsoft/setup-msbuild@v1.0.0
@@ -121,6 +136,20 @@ jobs:
         with:
           name: visual-studio
           path: kaldi/kaldiwin_vs2019_OPENBLAS/
+
+      - name: Setup java for mvn deploy
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+
+      - name: Deploy kaldi-windows.zip
+        working-directory: kaldi
+        #        env:
+        #          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          ls -al
+          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}${{ env.KALDI_VERSION }}${2}/g' pom.xml
+          mvn deploy
 
   linux:
     runs-on: ubuntu-latest
