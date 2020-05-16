@@ -130,11 +130,11 @@ jobs:
           dir
           dir kaldiwin
 
-      - name: Visual Studio artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: visual-studio
-          path: kaldi/kaldiwin_vs2019_OPENBLAS/
+#      - name: Visual Studio artifacts
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: visual-studio
+#          path: kaldi/kaldiwin_vs2019_OPENBLAS/
 
       - name: Setup java for mvn deploy
         uses: actions/setup-java@v1
@@ -148,7 +148,8 @@ jobs:
         run: |
           copy ..\.github\kaldi\* .
           dir
-          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}${{ env.KALDI_VERSION }}${2}/g' pom.xml
+          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}$ENV{'KALDI_VERSION'}${2}/g' pom.xml
+          cat pom.xml
           mvn deploy
 
   linux:
@@ -203,7 +204,7 @@ jobs:
         run: |
           cp ../.github/kaldi/* .
           ls -al
-          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}${{ env.KALDI_VERSION }}${2}/g' pom.xml
+          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}$ENV{'KALDI_VERSION'}${2}/g' pom.xml
           mvn deploy
 #          mvn deploy:deploy-file \
 #            -DgroupId=org.kaldi -DartifactId=kaldi Dclassifier=linux -Dversion=${{ env.KALDI_VERSION }} \
