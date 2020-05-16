@@ -135,6 +135,7 @@ jobs:
           repository: kaldi-asr/kaldi
           ref: ${{ env.KALDI_REF }}
           path: kaldi
+          clean: false
 
       - name: Kaldi Commit
         if: ${{ env.KALDI_REF == 'master' }}
