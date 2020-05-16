@@ -83,10 +83,10 @@ jobs:
         run: |
           (Get-Content 'variables.props.dev') | Foreach-Object {
             $_ -replace '(<OPENBLASDIR>).*(</OPENBLASDIR>)', '${1}OpenBLAS-v0.2.14-Win64-int32${2}' `
-            -replace '(<OPENFST>).*(</OPENFST>)', '${1}..\openfst${2}' `
-            -replace '(<OPENFSTLIB>).*(</OPENFSTLIB>)', '${1}..\openfst\build64${2}' `
-            -replace '(<PORTAUDIO>).*(</PORTAUDIO>)', '${1}..\openfst${2}' `
-            -replace '(<PORTAUDIOLIB>).*(</PORTAUDIOLIB>)', '${1}..\portaudio${2}'
+            -replace '(<OPENFST>).*(</OPENFST>)', '${1}..\..\..\..\openfst${2}' `
+            -replace '(<OPENFSTLIB>).*(</OPENFSTLIB>)', '${1}..\..\..\..\openfst\build64${2}' `
+            -replace '(<PORTAUDIO>).*(</PORTAUDIO>)', '${1}..\..\..\..\openfst${2}' `
+            -replace '(<PORTAUDIOLIB>).*(</PORTAUDIOLIB>)', '${1}..\..\..\..\portaudio${2}'
           } | Set-Content 'variables.props'
       #            -replace '(<NVTOOLSDIR>).*(</NVTOOLSDIR>)', '${1}..\openfst${2}'
 
