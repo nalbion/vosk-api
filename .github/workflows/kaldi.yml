@@ -148,7 +148,7 @@ jobs:
         run: |
           copy ..\.github\kaldi\* .
           dir
-          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}$ENV{'KALDI_VERSION'}${2}/g' pom.xml
+          perl -pi -e "s/^(\s{4}<version>).*(<\/version>)/${1}$ENV{'KALDI_VERSION'}${2}/g" pom.xml
           cat pom.xml
           mvn deploy
 
@@ -204,7 +204,7 @@ jobs:
         run: |
           cp ../.github/kaldi/* .
           ls -al
-          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}$ENV{'KALDI_VERSION'}${2}/g' pom.xml
+          perl -pi -e "s/^(\s{4}<version>).*(<\/version>)/${1}$ENV{'KALDI_VERSION'}${2}/g" pom.xml
           mvn deploy
 #          mvn deploy:deploy-file \
 #            -DgroupId=org.kaldi -DartifactId=kaldi Dclassifier=linux -Dversion=${{ env.KALDI_VERSION }} \
