@@ -32,7 +32,6 @@ jobs:
           repository: nalbion/kaldi
           ref: ${{ env.KALDI_REF }}
           path: kaldi
-          clean: false
 
       - name: Checkout OpenFST repo
         uses: actions/checkout@v2
@@ -147,7 +146,8 @@ jobs:
         #        env:
         #          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          ls -al
+          copy ..\.github\kaldi\* .
+          dir
           perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}${{ env.KALDI_VERSION }}${2}/g' pom.xml
           mvn deploy
 
@@ -164,7 +164,6 @@ jobs:
           repository: kaldi-asr/kaldi
           ref: ${{ env.KALDI_REF }}
           path: kaldi
-          clean: false
 
       - name: Kaldi Commit
         if: ${{ env.KALDI_REF == 'master' }}
@@ -202,6 +201,7 @@ jobs:
 #        env:
 #          GITHUB_TOKEN: ${{ github.token }}
         run: |
+          cp ../.github/kaldi/* .
           ls -al
           perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}${{ env.KALDI_VERSION }}${2}/g' pom.xml
           mvn deploy
