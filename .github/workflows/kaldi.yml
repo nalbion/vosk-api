@@ -143,13 +143,14 @@ jobs:
 
       - name: Deploy kaldi-windows.zip
         working-directory: kaldi
-        #        env:
-        #          GITHUB_TOKEN: ${{ github.token }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           copy ..\.github\kaldi\* .
-          dir
-          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}$ENV{"KALDI_VERSION"}${2}/g' pom.xml
-          cat pom.xml
+          (Get-Content 'pom.xml') | Foreach-Object {
+            $newVersion = '${1}' + "$env:KALDI_VERSION" + '${2}'
+            $_ -replace '^(\s{4}<version>).*(<\/version>)', $newVersion
+          } | Set-Content 'pom.xml'
           mvn deploy
 
   linux:
@@ -199,14 +200,13 @@ jobs:
 
       - name: Deploy kaldi-linux.zip
         working-directory: kaldi
-#        env:
-#          GITHUB_TOKEN: ${{ github.token }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           cp ../.github/kaldi/* .
-          ls -al
           perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}$ENV{"KALDI_VERSION"}${2}/g' pom.xml
-          cat pom.xml
           mvn deploy
+
 #          mvn deploy:deploy-file \
 #            -DgroupId=org.kaldi -DartifactId=kaldi Dclassifier=linux -Dversion=${{ env.KALDI_VERSION }} \
 #            -DrepositoryId=temp \
