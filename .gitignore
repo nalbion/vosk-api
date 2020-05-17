@@ -40,3 +40,5 @@ java/*.cc
 csharp/gen
 csharp/*.exe
 csharp/*.c
+java/target/
+*.iml
