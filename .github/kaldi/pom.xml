@@ -148,7 +148,12 @@
         </profile>
     </profiles>
 
-    <distributionManagement>
+    <scm>
+        <url>https://github.com/kaldi-asr/kaldi</url>
+        <connection>scm:git:https://github.com/kaldi-asr/kaldi.git</connection>
+        <developerConnection>scm:git:https://github.com/kaldi-asr/kaldi.git</developerConnection>
+    </scm>
+    <!--<distributionManagement>
         <repository>
             <id>temp</id>
             <url>https://maven.pkg.github.com/${GITHUB_REPOSITORY}</url>
@@ -157,5 +162,5 @@
             <id>temp</id>
             <url>https://maven.pkg.github.com/${GITHUB_REPOSITORY}</url>
         </snapshotRepository>
-    </distributionManagement>
+    </distributionManagement>-->
 </project>
