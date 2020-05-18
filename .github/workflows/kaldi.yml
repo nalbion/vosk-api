@@ -221,6 +221,6 @@ jobs:
 #          name: kaldi-linux-${{ env.KALDI_VERSION }}
 #          path: kaldi/kaldi-linux.zip
 
-#  macos:
+#  macos: (probably not needed)
 #    runs-on: macos-latest
 #    steps:
