@@ -147,10 +147,10 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           copy ..\.github\kaldi\* .
-          (Get-Content 'pom.xml') | Foreach-Object {
-            $newVersion = '${1}' + "$env:KALDI_VERSION" + '${2}'
-            $_ -replace '^(\s{4}<version>).*(<\/version>)', $newVersion
-          } | Set-Content 'pom.xml'
+#          (Get-Content 'pom.xml') | Foreach-Object {
+#            $newVersion = '${1}' + "$env:KALDI_VERSION" + '${2}'
+#            $_ -replace '^(\s{4}<version>).*(<\/version>)', $newVersion
+#          } | Set-Content 'pom.xml'
           mvn deploy
 
   linux:
@@ -204,7 +204,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           cp ../.github/kaldi/* .
-          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}$ENV{"KALDI_VERSION"}${2}/g' pom.xml
+#          perl -pi -e 's/^(\s{4}<version>).*(<\/version>)/${1}$ENV{"KALDI_VERSION"}${2}/g' pom.xml
           mvn deploy
 
 #          mvn deploy:deploy-file \
