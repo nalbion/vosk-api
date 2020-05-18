@@ -153,14 +153,14 @@
         <connection>scm:git:https://github.com/kaldi-asr/kaldi.git</connection>
         <developerConnection>scm:git:https://github.com/kaldi-asr/kaldi.git</developerConnection>
     </scm>
-    <!--<distributionManagement>
+    <distributionManagement>
         <repository>
-            <id>temp</id>
+            <id>github</id>
             <url>https://maven.pkg.github.com/${GITHUB_REPOSITORY}</url>
         </repository>
-        <snapshotRepository>
-            <id>temp</id>
+        <!--<snapshotRepository>
+            <id>github</id>
             <url>https://maven.pkg.github.com/${GITHUB_REPOSITORY}</url>
-        </snapshotRepository>
-    </distributionManagement>-->
+        </snapshotRepository>-->
+    </distributionManagement>
 </project>
